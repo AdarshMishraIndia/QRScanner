@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bg">
+
+    <!-- Main Content -->
+
+    <!-- Navigation Drawer -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <!-- Toolbar (Action Bar) -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/toolbar_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_hamburger"
+            app:title="@string/app_name"
+            app:titleTextColor="#30FF00" />
+
+        <!-- TextView on the extreme right -->
+        <TextView
+            android:id="@+id/textViewUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+            android:text="Right Text"
+            android:textColor="#FFFF00"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar"
+            app:layout_constraintEnd_toEndOf="@id/toolbar"
+            tools:ignore="HardcodedText,VisualLintOverlap" />
+
+        <!-- Camera Button -->
+
+        <ImageButton
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/master_bg"
+            android:padding="20dp"
+            android:src="@drawable/ic_master"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
+
+        <ImageButton
+            android:id="@+id/buttonCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_bg"
+            android:padding="20dp"
+            android:src="@drawable/ic_camera"
+            android:layout_marginEnd="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/buttonQRGen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg"
+            android:padding="20dp"
+            android:src="@drawable/ic_qr"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/start"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/buttonGPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg_off"
+            android:padding="20dp"
+            android:src="@drawable/ic_gps"
+            android:layout_marginEnd="50dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonCamera"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/transmitBLE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg_off"
+            android:padding="20dp"
+            android:src="@drawable/ic_ble_transmit"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonQRGen"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+
+        <ImageButton
+            android:id="@+id/receiveBLE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_bg_off"
+            android:padding="20dp"
+            android:src="@drawable/ic_ble_receive"
+            android:layout_marginEnd="50dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonGPS"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+        <!-- Camera Preview (Barcode Scanner) as overlay -->
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="16dp"
+            android:text="GPS Coordinates:"
+            android:textColor="#455A64"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/textViewCoordinates"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/transmitBLE"
+            tools:ignore="HardcodedText,VisualLintOverlap" />
+
+        <TextView
+            android:id="@+id/textViewCoordinates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/textbox_bg"
+            android:padding="10dp"
+            android:shadowColor="#000000"
+            android:shadowRadius="10"
+            android:text="TextView - GPS"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textAlignment="viewStart"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/textView1"
+            app:layout_constraintTop_toBottomOf="@+id/transmitBLE"
+            tools:ignore="HardcodedText,VisualLintOverlap" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
+            android:text="BLE Beacon:"
+            android:textAlignment="center"
+            android:textColor="#455A64"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/textViewBLE"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView1"
+            tools:ignore="HardcodedText,VisualLintOverlap" />
+
+        <TextView
+            android:id="@+id/textViewBLE"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/textbox_bg"
+            android:padding="10dp"
+            android:shadowColor="#000000"
+            android:shadowRadius="10"
+            android:text="TextView - BLE"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textAlignment="viewStart"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCoordinates"
+            tools:ignore="HardcodedText,VisualLintOverlap" />
+
+        <ImageView
+            android:id="@+id/qrCodeView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewBLE"
+            tools:ignore="ContentDescription,ImageContrastCheck" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:text="QR Data:"
+            android:textColor="#37474F"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/textViewQR"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/qrCodeView"
+            tools:ignore="HardcodedText,VisualLintOverlap" />
+
+        <TextView
+            android:id="@+id/textViewQR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/textbox_bg"
+            android:padding="10dp"
+            android:shadowColor="#000000"
+            android:shadowRadius="10"
+            android:text="TextView - QR"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textAlignment="viewStart"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/textViewQR"
+            app:layout_constraintTop_toBottomOf="@+id/qrCodeView"
+            tools:ignore="HardcodedText,VisualLintOverlap" />
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <!-- ZXing Barcode View inside the FrameLayout -->
+            <com.journeyapps.barcodescanner.BarcodeView
+                android:id="@+id/scanner_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/nav_menu"
+        app:headerLayout="@layout/nav_header"
+        tools:ignore="VisualLintBounds" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

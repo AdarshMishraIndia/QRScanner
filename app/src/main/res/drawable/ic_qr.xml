@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="30dp"
+    android:height="30dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Shadow Effect (Dark Gray Background) -->
+    <path
+        android:fillColor="#808080"
+    android:pathData="M1,1h22v22h-22z" />
+
+    <!-- Outer QR Code Borders (White) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M2,2h6v6H2zM16,2h6v6h-6zM2,16h6v6H2zM16,16h6v6h-6z" />
+
+    <!-- Inner QR Code Elements (White) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,6h4v2h-4zM6,10h2v4H6zM16,10h2v4h-2zM10,16h4v2h-4zM12,12h2v2h-2z" />
+</vector>
