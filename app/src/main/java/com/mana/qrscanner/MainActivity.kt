@@ -65,6 +65,8 @@ class MainActivity : AppCompatActivity() {
     private var isGPSEnabled = false
     private var isBLETransmitting = false
     private var isBLEReceiving = false
+    private var advertiseCallback: AdvertiseCallback? = null
+    private var scanCallback: ScanCallback? = null
 
 
     private val cameraPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -178,14 +180,14 @@ class MainActivity : AppCompatActivity() {
                 textView2.text = "BLE Transmitting:"
                 transmitBLE.setBackgroundResource(R.drawable.button_bg)
             } else {
-                advertiser?.stopAdvertising(@SuppressLint("ImplicitSamInstance")
-                object : AdvertiseCallback() {})
+                advertiser?.stopAdvertising(advertiseCallback)
+                Log.d("BLE_ADVERTISE", "BLE advertising stopped.")
+                advertiseCallback = null
                 textViewBLE.text = "TextView - BLE"
                 textView2.text = "BLE Beacon:"
                 transmitBLE.setBackgroundResource(R.drawable.button_bg_off)
             }
         }
-
 
         receiveBLE.setOnClickListener {
             if (!packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -200,8 +202,11 @@ class MainActivity : AppCompatActivity() {
                 textViewBLE.text = "Scanning..."
                 receiveBLE.setBackgroundResource(R.drawable.button_bg)
             } else {
-                scanner?.stopScan(@SuppressLint("ImplicitSamInstance")
-                object : ScanCallback() {})
+                scanCallback?.let {
+                    scanner?.stopScan(it)
+                    Log.d("BLE_SCAN", "BLE scanning stopped.")
+                    scanCallback = null
+                }
                 textView2.text = "BLE Beacon:"
                 textViewBLE.text = "TextView - BLE"
                 receiveBLE.setBackgroundResource(R.drawable.button_bg_off)
@@ -408,20 +413,27 @@ class MainActivity : AppCompatActivity() {
             .addServiceData(ParcelUuid.fromString("0000180D-0000-1000-8000-00805F9B34FB"), bleCode.toByteArray())
             .build()
 
-        advertiser?.startAdvertising(settings, data, object : AdvertiseCallback() {
+        Log.d("BLE_ADVERTISE", "Attempting to start BLE advertising with code: $bleCode")
+
+        advertiseCallback = object : AdvertiseCallback() {
             @SuppressLint("SetTextI18n")
             override fun onStartSuccess(settingsInEffect: AdvertiseSettings) {
                 textViewBLE.visibility = View.VISIBLE
                 textViewBLE.text = "Broadcasting: $bleCode"
                 Toast.makeText(this@MainActivity, "BLE Broadcasting Started", Toast.LENGTH_SHORT).show()
+                Log.d("BLE_ADVERTISE", "Started advertising code: $bleCode")
             }
 
             override fun onStartFailure(errorCode: Int) {
                 Toast.makeText(this@MainActivity, "BLE Advertising Failed: $errorCode", Toast.LENGTH_SHORT).show()
+                Log.e("BLE_ADVERTISE", "Advertising failed with error code: $errorCode")
             }
-        }) ?: Toast.makeText(this, "BLE Advertiser not initialized", Toast.LENGTH_SHORT).show()
-    }
+        }
 
+        advertiser?.startAdvertising(settings, data, advertiseCallback)
+
+
+    }
 
     private fun startBLEScanning() {
         if (bluetoothAdapter == null) {
@@ -446,16 +458,19 @@ class MainActivity : AppCompatActivity() {
             .build()
         val settings = ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
 
-        scanner?.startScan(listOf(filter), settings, object : ScanCallback() {
+        Log.d("BLE_SCAN", "Starting BLE scan...")
+
+        scanCallback = object : ScanCallback() {
             @Override
             @SuppressLint("SetTextI18n")
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 val scanData = result.scanRecord?.serviceData
                 scanData?.values?.forEach {
-                    val detectedCode = it.decodeToString() // Convert received bytes to string
-                    Log.d("BLE", "Detected Code: $detectedCode") // Debug log to verify data
+                    val detectedCode = it.decodeToString()
 
-                    // Run UI updates on the main thread
+                    Log.d("BLE_SCAN", "ScanResult received with code: $detectedCode")
+                    Log.d("BLE_SCAN", "Raw service data bytes: ${it.joinToString(",") { byte -> byte.toUByte().toString(16) }}")
+
                     runOnUiThread {
                         textViewBLE.visibility = View.VISIBLE
                         textViewBLE.text = "Received: $detectedCode"
@@ -465,7 +480,8 @@ class MainActivity : AppCompatActivity() {
             override fun onScanFailed(errorCode: Int) {
                 Toast.makeText(this@MainActivity, "BLE Scan Failed: $errorCode", Toast.LENGTH_SHORT).show()
             }
-        }) ?: Toast.makeText(this, "BLE Scanner not initialized", Toast.LENGTH_SHORT).show()
+        }
+        scanner?.startScan(listOf(filter), settings, scanCallback)
     }
 
     @Deprecated("Deprecated in API 30")
